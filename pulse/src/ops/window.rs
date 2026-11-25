@@ -307,7 +307,8 @@ mod tests {
 
         let pulsed = PulsedModel::new(&model, s.clone(), &1.to_dim()).unwrap();
         // Output's stream.delay must be 0 (causal past window).
-        assert_eq!(pulsed.outputs[0], pulsed.outputs[0]); // (placeholder for compile)
+        let output = pulsed.output_fact(0).unwrap();
+        assert_eq!(output.stream.as_ref().map(|s| s.delay), Some(0));
         let plan = SimplePlan::new(pulsed.into_typed().unwrap()).unwrap();
         let mut state = SimpleState::new(&plan).unwrap();
 
