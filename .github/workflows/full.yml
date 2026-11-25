@@ -103,7 +103,8 @@ jobs:
       with:
         save-if: false # restore-only: schedule/dispatch job, never save (would evict the per-PR caches under the 10 GB cap)
     - name: Full test
-      run: ci/onnx-tests.sh ${{ matrix.opset }}
+      # The unit and NNEF suites do not depend on the ONNX opset.
+      run: ci/onnx-tests.sh ${{ matrix.opset }} ${{ strategy.job-index != 0 && '--opset-only' || '' }}
 
   tflite:
     runs-on: ubuntu-24.04
